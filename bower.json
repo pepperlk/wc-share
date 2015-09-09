@@ -1,0 +1,30 @@
+{
+  "name": "wc-share",
+  "version": "0.0.1",
+  "authors": [
+     "Lee Pepper <pepperlk@gmail.com>"
+  ],
+  "description": "An element providing a share capability to an <a /> tag",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "seed"
+  ],
+  "main": "wc-share.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/pepperlk/wc-share/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+       "jquery": "~2.1.4"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

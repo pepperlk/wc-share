@@ -1,0 +1,164 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../paper-behaviors/paper-button-behavior.html">
+
+
+<script src="../jquery/dist/jquery.min.js"></script>
+
+
+
+
+<dom-module id="wc-share">
+
+
+
+    <style>
+        :host {
+            /*
+      display: block;
+      box-sizing: border-box;
+*/
+        }
+    </style>
+
+    <template>
+
+
+        <content></content>
+
+    </template>
+
+</dom-module>
+
+<script>
+    Polymer({
+
+        is: 'wc-share',
+        extends: 'a',
+        //        behaviors: [
+        //            Polymer.PaperButtonBehavior
+        //        ],
+
+        properties: {
+
+
+            shareType: String,
+            shareUrl: String,
+            shareConfig: {
+                type: Object,
+
+                value: function () {
+                    return {};
+                }
+            },
+
+        },
+
+        // Element Lifecycle
+
+        ready: function () {
+
+            var model = this;
+
+
+
+
+            if ($.type(model.shareConfig) == "string") {
+
+                model.shareConfig = JSON.parse(model.shareConfig);
+            }
+
+            if (this.shareType == "facebook") {
+
+                if ($(window.body).find('#fb-root').length == 0) {
+                    $(window.body).append('<div id="fb-root"></div>');
+                }
+
+
+                window.fbAsyncInit = function () {
+
+
+
+                    FB.init(model.shareConfig);
+                };
+                (function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {
+                        return;
+                    }
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "//connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+            }
+
+            if (this.shareType == "twitter") {
+
+                $(this).attr('href', "https://twitter.com/intent/tweet?url=" + window.location.href);
+
+                window.twttr = (function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0],
+                        t = window.twttr || {};
+                    if (d.getElementById(id)) return t;
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "https://platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+
+                    t._e = [];
+                    t.ready = function (f) {
+                        t._e.push(f);
+                    };
+
+                    return t;
+                }(document, "script", "twitter-wjs"));
+            }
+
+            if (this.shareType == "pinterest") {
+                (function (d, s, id) {
+                    var js, pjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {
+                        return;
+                    }
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "//assets.pinterest.com/sdk/sdk.js";
+                    pjs.parentNode.insertBefore(js, pjs);
+                }(document, 'script', 'pinterest-jssdk'));
+            }
+
+
+            $(this).on('click', function (e) {
+                e.preventDefault();
+
+                console.log("Share : " + this.shareType);
+                if (this.shareType == "facebook") {
+                    FB.ui({
+                        method: 'share',
+                        href: model.shareUrl ? model.shareUrl : window.location.href
+                    }, function (response) {});
+                }
+                if (this.shareType == "twitter") {
+
+                }
+
+                if (this.shareType == "pinterest") {
+                    PDK.pin(model.shareConfig.image ? model.shareConfig.image : window.location.href, "", model.shareUrl ? model.shareUrl : window.location.href, function () {
+                        // do something
+                    });
+                }
+
+
+
+            });
+
+        },
+
+
+
+
+
+
+    });
+</script>
