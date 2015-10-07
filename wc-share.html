@@ -70,62 +70,42 @@
 
             if (this.shareType == "facebook") {
 
-                if ($(window.body).find('#fb-root').length == 0) {
-                    $(window.body).append('<div id="fb-root"></div>');
-                }
-
-
-                window.fbAsyncInit = function () {
-
-
-
-                    FB.init(model.shareConfig);
-                };
-                (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "//connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
+            
             }
 
             if (this.shareType == "twitter") {
 
-                $(this).attr('href', "https://twitter.com/intent/tweet?url=" + window.location.href);
-
-                window.twttr = (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0],
-                        t = window.twttr || {};
-                    if (d.getElementById(id)) return t;
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://platform.twitter.com/widgets.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-
-                    t._e = [];
-                    t.ready = function (f) {
-                        t._e.push(f);
-                    };
-
-                    return t;
-                }(document, "script", "twitter-wjs"));
+//                $(this).attr('href', "https://twitter.com/intent/tweet?url=" + window.location.href);
+//
+//                window.twttr = (function (d, s, id) {
+//                    var js, fjs = d.getElementsByTagName(s)[0],
+//                        t = window.twttr || {};
+//                    if (d.getElementById(id)) return t;
+//                    js = d.createElement(s);
+//                    js.id = id;
+//                    js.src = "https://platform.twitter.com/widgets.js";
+//                    fjs.parentNode.insertBefore(js, fjs);
+//
+//                    t._e = [];
+//                    t.ready = function (f) {
+//                        t._e.push(f);
+//                    };
+//
+//                    return t;
+//                }(document, "script", "twitter-wjs"));
             }
 
             if (this.shareType == "pinterest") {
-                (function (d, s, id) {
-                    var js, pjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "//assets.pinterest.com/sdk/sdk.js";
-                    pjs.parentNode.insertBefore(js, pjs);
-                }(document, 'script', 'pinterest-jssdk'));
+//                (function (d, s, id) {
+//                    var js, pjs = d.getElementsByTagName(s)[0];
+//                    if (d.getElementById(id)) {
+//                        return;
+//                    }
+//                    js = d.createElement(s);
+//                    js.id = id;
+//                    js.src = "//assets.pinterest.com/sdk/sdk.js";
+//                    pjs.parentNode.insertBefore(js, pjs);
+//                }(document, 'script', 'pinterest-jssdk'));
             }
 
 
@@ -134,19 +114,35 @@
 
                 console.log("Share : " + this.shareType);
                 if (this.shareType == "facebook") {
-                    FB.ui({
-                        method: 'share',
-                        href: model.shareUrl ? model.shareUrl : window.location.href
-                    }, function (response) {});
+                    
+                    
+                    var shareurl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(model.shareUrl ? model.shareUrl : window.location.href);
+                    
+                    model._openWindow(shareurl, 'Facebook', 640, 480);
+                    
                 }
+                
+                 if (this.shareType == "plus") {
+                    
+                    
+                    var shareurl = 'https://plus.google.com/share?url=' + encodeURIComponent(model.shareUrl ? model.shareUrl : window.location.href);
+                    
+                    model._openWindow(shareurl, 'Google Plus', 640, 480);
+                    
+                }
+                
                 if (this.shareType == "twitter") {
 
+                    
+                    var shareurl = 'http://www.twitter.com/share?url='+ encodeURIComponent(model.shareUrl ? model.shareUrl : window.location.href);
+                    model._openWindow(shareurl, 'Twitter', 640, 480);
                 }
 
                 if (this.shareType == "pinterest") {
-                    PDK.pin(model.shareConfig.image ? model.shareConfig.image : window.location.href, "", model.shareUrl ? model.shareUrl : window.location.href, function () {
-                        // do something
-                    });
+                    
+                    var shareurl = 'https://pinterest.com/pin/create/button/?url='+encodeURIComponent(model.shareUrl ? model.shareUrl : window.location.href)+'&media='+encodeURIComponent(model.shareConfig.image ? model.shareConfig.image : window.location.href)+'&description=';
+                    model._openWindow(shareurl, 'Pin', 640, 480);
+             
                 }
 
 
@@ -156,6 +152,26 @@
         },
 
 
+       
+            _openWindow : function(url, title, w, h){
+                
+              // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+    width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+    var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+    // Puts focus on the newWindow
+    if (window.focus) {
+        newWindow.focus();
+    }
+                
+            }
 
 
 
